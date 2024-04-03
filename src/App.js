@@ -228,7 +228,7 @@ function App() {
       <div style={{height:'250px', width:'200px', margin: '20px', borderRadius: '25px', boxShadow: '0 2px 4px rgba(20, 0, 0, 0.1)'}}>
       <div>
           <div style={{justifyContent:'center', alignItems: 'center'}}>
-          <h3>Temperature <img src="/thermo.png" alt="" height={40} width={40}/> </h3>
+          <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}><h3>Temperature </h3><img src="/thermo.png" alt="" height={40} width={40}/> </div>
           
           <div style={{display: 'flex', justifyContent: 'center'}}>
             <h1 style={circleStyleRed}>53&deg;</h1>
@@ -242,7 +242,7 @@ function App() {
       <div style={{height:'250px', width:'200px', margin: '20px', borderRadius: '25px', boxShadow: '0 2px 4px rgba(20, 0, 0, 0.1)'}}>
       <div>
           <div style={{justifyContent:'center', alignItems: 'center'}}>
-          <h3>Soil Moisture <img src="/moist.png" alt="" height={40} width={40}/></h3>
+          <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}><h3>Soil Moisture</h3> <img src="/moist.png" alt="" height={40} width={40}/></div>
           
           <div style={{display: 'flex', justifyContent: 'center'}}>
           <h1 style={circleStyleBlue}>97%</h1>
@@ -256,7 +256,7 @@ function App() {
       <div style={{height:'250px', width:'200px', margin: '20px', borderRadius: '25px', boxShadow: '0 2px 4px rgba(20, 0, 0, 0.1)'}}>
       <div>
           <div style={{justifyContent:'center', alignItems: 'center'}}>
-          <h3>Light Intensity <img src="/light.png" alt="" height={40} width={40}/></h3>
+          <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}><h3>Light Intensity</h3> <img src="/light.png" alt="" height={40} width={40}/></div>
           
           <div style={{display: 'flex', justifyContent: 'center'}}>
           <h1 style={circleStyleLight}>Very Sunny</h1>
@@ -270,12 +270,13 @@ function App() {
       <div style={{height:'250px', width:'200px', margin: '20px', borderRadius: '25px', boxShadow: '0 2px 4px rgba(20, 0, 0, 0.1)'}}>
       <div>
           <div style={{justifyContent:'center', alignItems: 'center'}}>
-          <h3>Plant Health <img src="/plant.png" alt="" height={40} width={40}/></h3>
+          <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}> <h3>Plant Health</h3> <img src="/plant.png" alt="" height={40} width={40}/></div>
           
           <div style={{display: 'flex', justifyContent: 'center'}}>
-          <h1 style={circleStyleGreen}>Disease Prone</h1>
-          </div>
+          <h1 style={circleStyleGreen}>poor</h1>
           
+          </div>
+          <p>Machine Learning Model</p>
           </div>
           
           
