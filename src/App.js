@@ -4,6 +4,8 @@ import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import axios from 'axios'
+import { useState, useEffect } from 'react';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -179,6 +181,7 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 function App() {
+  const [prediction, setPrediction] = useState(null);
   const circleStyleRed = {
     width: '100px',
     height: '100px',
@@ -219,6 +222,32 @@ function App() {
     alignItems: 'center',
     fontSize: '24px',
   };
+  useEffect(() => {
+    // Function to generate random data
+    const generateRandomData = () => {
+      return Math.random() * 100; // You can adjust this based on your data requirements
+    };
+    
+    // Making the API call
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('https://fepbackend.onrender.com/predict/', {
+          LeafHumidity: generateRandomData(),
+          PlantAge: generateRandomData(),
+          SunExposureLevel: generateRandomData()
+        });
+
+        setPrediction(response.data); // Saving the prediction in state
+        console.log(response.data)
+      } catch (error) {
+        console.error('Error fetching prediction:', error);
+        // Handle error
+      }
+    };
+
+    fetchData(); // Call fetchData when component mounts or refreshes
+  }, []); // Empty dependency array means this effect runs only once when component mounts
+
   return (
     <div className="App" >
       <h1>Dashboard</h1>
@@ -273,7 +302,7 @@ function App() {
           <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}> <h3>Plant Health</h3> <img src="/plant.png" alt="" height={40} width={40}/></div>
           
           <div style={{display: 'flex', justifyContent: 'center'}}>
-          <h1 style={circleStyleGreen}>poor</h1>
+          <h1 style={circleStyleGreen}>{prediction?.PlantHealth[0]>0? 'Good':'Poor'}</h1>
           
           </div>
           <p>Machine Learning Model</p>
