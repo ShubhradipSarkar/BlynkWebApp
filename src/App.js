@@ -182,6 +182,9 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 
 function App() {
   const [prediction, setPrediction] = useState(null);
+  const [humidity, setHumidity] = useState("");
+  const [temp, setTemp] = useState("")
+  const [pumpState, setPumpState] = useState(0);
   const circleStyleRed = {
     width: '100px',
     height: '100px',
@@ -222,19 +225,33 @@ function App() {
     alignItems: 'center',
     fontSize: '24px',
   };
+  const pumpEngine = async() => {
+    console.log('Pump engine')
+    setPumpState(!pumpState);
+    if(pumpState===true) await axios.get('https://blr1.blynk.cloud/external/api/update?token=zQ96W7gGJgikPR16B-O9AtWzieQkqzN6&V3=1');
+    else await axios.get('https://blr1.blynk.cloud/external/api/update?token=zQ96W7gGJgikPR16B-O9AtWzieQkqzN6&V3=0')
+    console.log(pumpState);
+  }
   useEffect(() => {
     // Function to generate random data
     const generateRandomData = () => {
       return Math.random() * 100; // You can adjust this based on your data requirements
     };
+
     
     // Making the API call
     const fetchData = async () => {
       try {
+        const temperatureResponse = await axios.get('https://blr1.blynk.cloud/external/api/get?token=zQ96W7gGJgikPR16B-O9AtWzieQkqzN6&V6');
+        const humidityResponse = await axios.get('https://blr1.blynk.cloud/external/api/get?token=zQ96W7gGJgikPR16B-O9AtWzieQkqzN6&V5');
+        const moistureResponse = await axios.get('https://blr1.blynk.cloud/external/api/get?token=zQ96W7gGJgikPR16B-O9AtWzieQkqzN6&V4');
+        //console.log(temperatureResponse.data);
+        setHumidity(humidityResponse.data);
+        setTemp(temperatureResponse.data);
         const response = await axios.post('https://fepbackend.onrender.com/predict/', {
-          LeafHumidity: generateRandomData(),
+          LeafHumidity: humidityResponse.data,
           PlantAge: generateRandomData(),
-          SunExposureLevel: generateRandomData()
+          SunExposureLevel: temperatureResponse.data
         });
 
         setPrediction(response.data); // Saving the prediction in state
@@ -260,7 +277,7 @@ function App() {
           <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}><h3>Temperature </h3><img src="/thermo.png" alt="" height={40} width={40}/> </div>
           
           <div style={{display: 'flex', justifyContent: 'center'}}>
-            <h1 style={circleStyleRed}>53&deg;</h1>
+            <h1 style={circleStyleRed}><p>{temp}</p>&deg;</h1>
           </div>
           
           </div>
@@ -274,7 +291,7 @@ function App() {
           <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}><h3>Soil Moisture</h3> <img src="/moist.png" alt="" height={40} width={40}/></div>
           
           <div style={{display: 'flex', justifyContent: 'center'}}>
-          <h1 style={circleStyleBlue}>97%</h1>
+          <h1 style={circleStyleBlue}><p>{humidity}</p>%</h1>
           </div>
           
           </div>
@@ -314,8 +331,8 @@ function App() {
       </div>
       <h3>Actuators</h3>
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap'}}>
-      <div style={{height:'200px', width:'200px', margin: '20px', borderRadius: '25px', boxShadow: '0 2px 4px rgba(20, 0, 0, 0.1)'}}>
-        <div>
+      {/* <div style={{height:'200px', width:'200px', margin: '20px', borderRadius: '25px', boxShadow: '0 2px 4px rgba(20, 0, 0, 0.1)'}}> */}
+        {/* <div>
           <div style={{justifyContent:'center', alignItems: 'center', marginTop: '60px'}}>
           <h3>Shade</h3>
           
@@ -331,9 +348,9 @@ function App() {
           </div>
           
           
-        </div>
+        </div> */}
         
-      </div>
+      {/* </div> */}
       <div style={{height:'200px', width:'200px', margin: '20px', borderRadius: '25px', boxShadow: '0 2px 4px rgba(20, 0, 0, 0.1)'}}>
       <div>
           <div style={{justifyContent:'center', alignItems: 'center', marginTop: '60px'}}>
@@ -342,7 +359,7 @@ function App() {
           <div style={{display: 'flex', justifyContent: 'center'}}>
           <Typography>Off</Typography>
           <div style={{margin: '4px'}}>
-          <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
+          <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} onClick={pumpEngine}/>
           </div>
             
           <Typography>On</Typography>
